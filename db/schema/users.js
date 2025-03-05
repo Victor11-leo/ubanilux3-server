@@ -1,8 +1,8 @@
 const { serial, text, pgSchema, boolean, pgTable } = require("drizzle-orm/pg-core");
 
-export const mySchema = pgSchema("my_schema");
+const mySchema = pgSchema("my_schema");
 
-export const Users = pgTable('users', {
+const Users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   photo: text('photo').notNull(),
@@ -10,4 +10,5 @@ export const Users = pgTable('users', {
   isAdmin: boolean('isAdmin').default(false),
 });
 
+module.exports ={Users}
 

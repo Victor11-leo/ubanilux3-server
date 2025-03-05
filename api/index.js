@@ -1,7 +1,11 @@
 const express = require('express')
 const cors = require("cors")
 require('dotenv').config()
+
 const authRoutes = require('../routes/auth')
+const carRoutes = require('../routes/cars')
+const bookingRoutes = require('../routes/bookings')
+const payRoutes = require('../routes/payment')
 
 const app = express();
 app.use(express.json())
@@ -13,12 +17,10 @@ app.get("/", (req, res) => {
     res.send("Express on Vercel")
 });
 app.use("/auth",authRoutes)
-// Routes
-// auth
-// users
-// cars
-// bookings
-// payments
+app.use("/cars",carRoutes)
+app.use("/bookings",bookingRoutes)
+app.use("/pay",payRoutes)
+
 
 
 app.listen(3000, () => console.log("Server ready on port 3000."));

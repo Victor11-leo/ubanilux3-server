@@ -3,11 +3,11 @@ const { serial, text, pgSchema,date, pgEnum, integer, pgTable } = require("drizz
 const { Users } = require("./users.js");
 const { Cars } = require("./cars.js");
 
-export const mySchema = pgSchema("my_schema");
+const mySchema = pgSchema("my_schema");
 
-export const statusEnum = pgEnum('status', ['pending', 'approved', 'denied','cancelled','picked up']);
+const statusEnum = pgEnum('status', ['pending', 'approved', 'denied','cancelled','picked up']);
 
-export const Bookings = pgTable('bookings', {
+const Bookings = pgTable('bookings', {
   id: serial('id').primaryKey(),
   pickupDate: date('pickupDate'),
   paymentId: text('paymentId'),
@@ -17,7 +17,7 @@ export const Bookings = pgTable('bookings', {
   status: statusEnum().default('pending'),
 });
 
-export const bookingRelations = relations(Bookings,({one}) => ({
+const bookingRelations = relations(Bookings,({one}) => ({
     user:one(Users,{
         fields:[Bookings.userId],
         references:[Users.id]
@@ -27,4 +27,10 @@ export const bookingRelations = relations(Bookings,({one}) => ({
         references:[Cars.id]
     }),
 }))
+
+module.exports = {
+    Bookings,
+    bookingRelations,
+    statusEnum
+}
 
