@@ -49,7 +49,7 @@ const stkPush = async (req,res) => {
               PartyA:`254${phoneNum}`,    
               PartyB:shortCode,    
               PhoneNumber:`254${phoneNum}`,    
-              CallBackURL: "https://1986-102-213-251-138.ngrok-free.app/pay",    
+              CallBackURL: "https://ubanilux3-server.vercel.app/pay",    
               AccountReference:`254${phoneNum}`,    
               TransactionDesc:"Ubanilux Booking"
             },
