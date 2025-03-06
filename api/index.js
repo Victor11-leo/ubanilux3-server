@@ -1,5 +1,7 @@
 const express = require('express')
 const cors = require("cors")
+const bodyParser = require('body-parser');
+
 require('dotenv').config()
 
 const authRoutes = require('../routes/auth')
@@ -16,6 +18,13 @@ app.get("/", (req, res) => {
     console.log(process.env.CLOUDINARY_NAME);
     res.send("Express on Vercel")
 });
+
+app.post("/", (req, res) => {
+    console.log(req.body);
+    res.json({message:"goog"})
+});
+
+
 app.use("/auth",authRoutes)
 app.use("/cars",carRoutes)
 app.use("/bookings",bookingRoutes)

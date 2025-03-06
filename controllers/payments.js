@@ -4,7 +4,7 @@ const axios = require("axios")
 const generateToken = async (req,res,next) => {
     const secret = process.env.MPESA_SECRET
   const consumer = process.env.MPESA_CONSUMER
-
+  console.log('generating token');
   const auth = new Buffer.from(`${consumer}:${secret}`).toString('base64')
   await axios.get(
     "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
@@ -26,7 +26,8 @@ const generateToken = async (req,res,next) => {
 const stkPush = async (req,res) => {
     try {
         const {phone,amount} = req.body
-
+        console.log('stk Pushing');
+        console.log(phone);
         const phoneNum = phone.substring(1)
         const date = new Date()
         const timeStamp = date.getFullYear() + ("0" + (date.getMonth() + 1)).slice(-2) + ("0" + (date.getDate() + 1)).slice(-2) + ("0" + (date.getHours() + 1)).slice(-2) + ("0" + (date.getMinutes() + 1)).slice(-2) + ("0" + (date.getSeconds() + 1)).slice(-2)
@@ -48,7 +49,7 @@ const stkPush = async (req,res) => {
               PartyA:`254${phoneNum}`,    
               PartyB:shortCode,    
               PhoneNumber:`254${phoneNum}`,    
-              CallBackURL: "https://83d1-102-213-251-138.ngrok-free.app/pay/",    
+              CallBackURL: "https://1986-102-213-251-138.ngrok-free.app/pay",    
               AccountReference:`254${phoneNum}`,    
               TransactionDesc:"Ubanilux Booking"
             },

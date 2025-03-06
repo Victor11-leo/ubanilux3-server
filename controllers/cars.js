@@ -1,5 +1,8 @@
+const { eq } = require("drizzle-orm");
 const {db} = require("../db/index")
 const {Cars} = require("../db/schema/cars")
+const cloudinary = require('cloudinary').v2;
+
 require('dotenv').config()
 
 const fetchCar = async (req,res) => {
@@ -14,36 +17,34 @@ const fetchCar = async (req,res) => {
     }
 }
 
+const fetchSpecificCar = async (req,res) => {
+    try {
+        const {id} = req.params
+        const cars = await db.select().from(Cars).where(eq(Cars.id,id))
+        res.json({message:"success", data:cars})
+    } catch (error) {
+        console.log(error);
+        res.json({error:`Error is ${error.message}`})
+        
+    }
+}
+
 
 const createCar = async (req,res) => {
     try {
-        const {image,rentalPrice,model,description,name} = req.body
+        const {rentalPrice,model,description,name} = req.body
+        
+        const bookingCreated = await db.insert(Cars)
+        .values({
+            rentalPrice,
+            model,
+            description,
+            name
+        }).returning()
 
-        cloudinary.config({ 
-            cloud_name: process.env.CLOUDINARY_NAME, 
-            api_key: process.env.CLOUDINARY_API_KEY, 
-            api_secret: process.env.CLOUDINARY_API_SECRET
-        });
-
-        const uploadedImage = await cloudinary.uploder.upload(image,{
-            folder:'ubanilux-cars',
-            tags:['ubanilux-cars']
-        })
-        if (uploadedImage) {
-            const bookingCreated = await db.insert(Cars)
-            .values({
-                image:uploadedImage.public_id,
-                rentalPrice,
-                model,
-                description,
-                name
-            }).returning()
-    
-            res.json({message:"success", data:bookingCreated})
-        }
-        res.json({message:"issues uploading image"})
+        res.json({message:"success", data:bookingCreated})
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.json({error:`Error is ${error.message}`})
         
     }
@@ -106,6 +107,7 @@ const deleteCar = async (req,res) => {
 
 module.exports = {
     fetchCar,
+    fetchSpecificCar,
     createCar,
     editCar,
     deleteCar
